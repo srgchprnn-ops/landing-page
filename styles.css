@@ -47,7 +47,9 @@ a { color: inherit; text-decoration: none; }
   background: var(--ink);
   color: var(--paper);
   overflow: hidden;
-  transition: color .4s var(--ease), background .4s var(--ease), border-color .4s var(--ease);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .18);
+  transition: color .4s var(--ease), background .4s var(--ease),
+              border-color .4s var(--ease), box-shadow .4s var(--ease), transform .4s var(--ease);
   z-index: 0;
 }
 .btn::before {
@@ -59,7 +61,7 @@ a { color: inherit; text-decoration: none; }
   transition: transform .4s var(--ease);
   z-index: -1;
 }
-.btn:hover { color: var(--ink); }
+.btn:hover { color: var(--ink); transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0, 0, 0, .26); }
 .btn:hover::before { transform: translateY(0); }
 .btn-sm { padding: 9px 18px; font-size: .74rem; }
 .btn-outline {
@@ -80,7 +82,7 @@ a { color: inherit; text-decoration: none; }
   border-bottom: 1px solid transparent;
   transition: border-color .4s var(--ease), background .4s var(--ease);
 }
-.header.scrolled { border-bottom-color: var(--line-paper); }
+.header.scrolled { border-bottom-color: var(--line-paper); box-shadow: 0 8px 28px rgba(0, 0, 0, .08); }
 .nav { display: flex; align-items: center; justify-content: space-between; height: 72px; }
 .logo { font-family: var(--font-serif); font-weight: 900; font-size: 1.35rem; letter-spacing: -0.02em; }
 .logo span { color: var(--muted-paper); font-style: italic; font-weight: 500; }
@@ -108,14 +110,14 @@ a { color: inherit; text-decoration: none; }
 /* ===== Инверсные секции (чёрный фон) ===== */
 .invert { background: var(--ink); color: var(--paper); }
 .invert .section-lead, .invert .section-eyebrow { color: var(--muted-ink); }
-.invert .btn { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+.invert .btn { background: var(--paper); color: var(--ink); border-color: var(--paper); box-shadow: 0 10px 30px rgba(0, 0, 0, .55); }
 .invert .btn::before { background: var(--ink); }
 .invert .btn:hover { color: var(--paper); }
 .invert .btn-outline { background: transparent; color: var(--paper); border-color: var(--line-ink); }
 .invert .btn-outline::before { background: var(--paper); }
 .invert .btn-outline:hover { color: var(--ink); border-color: var(--paper); }
-.invert .card { border-color: var(--line-ink); }
-.invert .card:hover { background: #0e0e0e; border-color: var(--paper); }
+.invert .card { background: #0c0c0c; border-color: var(--line-ink); box-shadow: 0 20px 44px rgba(0, 0, 0, .7), inset 0 1px 0 rgba(255, 255, 255, .05); }
+.invert .card:hover { background: #131313; border-color: var(--paper); box-shadow: 0 30px 60px rgba(0, 0, 0, .85), inset 0 1px 0 rgba(255, 255, 255, .08); }
 .invert .card p { color: var(--muted-ink); }
 .invert .card-num, .invert .card-cta { color: var(--paper); }
 
@@ -200,13 +202,15 @@ a { color: inherit; text-decoration: none; }
   gap: 18px;
 }
 .card {
-  background: transparent;
+  background: var(--paper);
   border: 1px solid var(--line-paper);
   border-radius: 16px;
   padding: 34px 30px;
-  transition: transform .45s var(--ease), border-color .45s var(--ease), background .45s var(--ease);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .06);
+  transition: transform .45s var(--ease), border-color .45s var(--ease),
+              background .45s var(--ease), box-shadow .45s var(--ease);
 }
-.card:hover { transform: translateY(-6px); border-color: var(--ink); }
+.card:hover { transform: translateY(-6px); border-color: var(--ink); box-shadow: 0 26px 50px rgba(0, 0, 0, .14); }
 .card-num {
   font-family: var(--font-mono);
   font-size: 1.1rem;
@@ -248,7 +252,7 @@ a { color: inherit; text-decoration: none; }
   color: var(--muted-ink);
 }
 
-/* ===== Призрачные фоновые элементы ===== */
+/* ===== Призрачный фон из символов Ø ===== */
 .ghost-layer {
   position: absolute;
   inset: 0;
@@ -256,23 +260,42 @@ a { color: inherit; text-decoration: none; }
   overflow: hidden;
   pointer-events: none;
 }
+/* Плотное поле из множества мелких Ø (тайлами; цвет адаптируется к секции) */
+.ghost-layer::before {
+  content: "";
+  position: absolute;
+  inset: -40px;
+  background: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='58'%20height='58'%3E%3Ctext%20x='29'%20y='40'%20font-family='monospace'%20font-size='30'%20text-anchor='middle'%20fill='%23000'%3E%26%23216%3B%3C/text%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='58'%20height='58'%3E%3Ctext%20x='29'%20y='40'%20font-family='monospace'%20font-size='30'%20text-anchor='middle'%20fill='%23000'%3E%26%23216%3B%3C/text%3E%3C/svg%3E");
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+  -webkit-mask-size: 56px 56px;
+  mask-size: 56px 56px;
+  opacity: .05;
+}
+.invert .ghost-layer::before { opacity: .08; }
+
+/* Крупные парящие Ø с тенью — добавляют глубину */
 .ghost {
   position: absolute;
-  font-family: var(--font-mono);
-  font-weight: 700;
+  font-family: var(--font-sans);
+  font-weight: 400;
   color: currentColor;
-  opacity: .05;
-  white-space: nowrap;
+  opacity: .08;
   line-height: 1;
   user-select: none;
   will-change: transform;
+  filter: drop-shadow(0 14px 26px rgba(0, 0, 0, .35));
 }
-.invert .ghost { opacity: .07; }
+.invert .ghost { opacity: .12; filter: drop-shadow(0 16px 32px rgba(0, 0, 0, .7)); }
 
-.ghost-a { top: 4%;  left: -2%;  font-size: clamp(6rem, 22vw, 17rem); animation: drift 12s ease-in-out infinite; }
-.ghost-b { bottom: 6%; right: -1%; font-size: clamp(4rem, 14vw, 11rem); animation: drift 15s ease-in-out infinite reverse; }
-.ghost-c { top: 38%; right: 5%;   font-size: clamp(1.8rem, 5.5vw, 4rem); animation: drift 10s ease-in-out infinite; }
-.ghost-d { bottom: 16%; left: 4%; font-size: clamp(1.6rem, 5vw, 3.4rem); animation: drift 17s ease-in-out infinite reverse; }
+.o1 { top: -6%;   left: 1%;    font-size: clamp(7rem, 22vw, 18rem); animation: drift 13s ease-in-out infinite; }
+.o2 { top: 26%;   right: 3%;   font-size: clamp(4rem, 12vw, 9rem);  animation: drift 16s ease-in-out infinite reverse; }
+.o3 { bottom: -8%; left: 32%;  font-size: clamp(6rem, 18vw, 13rem); animation: drift 11s ease-in-out infinite; }
+.o4 { top: 14%;   right: 26%;  font-size: clamp(2.5rem, 7vw, 5rem); animation: drift 19s ease-in-out infinite reverse; }
+.o5 { bottom: 12%; right: 12%; font-size: clamp(3rem, 9vw, 7rem);   animation: drift 14s ease-in-out infinite; }
+.o6 { top: 52%;   left: 6%;    font-size: clamp(2rem, 6vw, 4rem);   animation: drift 21s ease-in-out infinite reverse; }
 
 @keyframes drift {
   0%, 100% { transform: translate(0, 0); }
